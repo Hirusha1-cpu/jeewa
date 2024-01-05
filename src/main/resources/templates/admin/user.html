@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:replace="~{ head :: headFragment}"></head>
+<head th:replace="~{ components/head :: headFragment}"></head>
 
 <body>
 
   <!-- ======= Header ======= -->
-  <header th:replace="~{navbar :: topnavbarfragment}"> </header><!-- End Header -->
+  <header th:replace="~{components/navbar :: topnavbarfragment}"> </header><!-- End Header -->
 
   <!-- ======= Sidebar ======= -->
-  <aside th:replace="~{ sidebar :: sidebarfragment}"></aside><!-- End Sidebar-->
+  <aside th:replace="~{ components/sidebar :: sidebarfragment}"></aside><!-- End Sidebar-->
 
   <main id="main" class="main">
 
@@ -311,7 +311,7 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer th:replace="~{ footer :: footerfragment}"></footer>
+  <footer th:replace="~{ components/footer :: footerfragment}"></footer>
   <!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
