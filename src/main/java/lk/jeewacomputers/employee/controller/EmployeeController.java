@@ -23,6 +23,7 @@ public class EmployeeController {
         ModelAndView viewEmp = new ModelAndView();
         viewEmp.setViewName("admin/employee.html");
         viewEmp.addObject("title","Employee Management : BIT Project 2024");
+        viewEmp.addObject("classEmp", "active");
         return viewEmp;
     }
 

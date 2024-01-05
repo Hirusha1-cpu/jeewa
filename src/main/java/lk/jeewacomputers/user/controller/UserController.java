@@ -12,6 +12,7 @@ public class UserController {
         ModelAndView viewEmp = new ModelAndView();
         viewEmp.setViewName("admin/user.html");
         viewEmp.addObject("title","User Management : BIT Project 2024");
+        viewEmp.addObject("classUser", "active");
         return viewEmp;
     }
     

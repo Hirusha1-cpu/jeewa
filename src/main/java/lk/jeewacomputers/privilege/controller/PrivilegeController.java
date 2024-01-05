@@ -12,6 +12,7 @@ public class PrivilegeController {
         ModelAndView viewEmp = new ModelAndView();
         viewEmp.setViewName("admin/privilege.html");
         viewEmp.addObject("title","Privilege Management : BIT Project 2024");
+        viewEmp.addObject("classPrivi", "active");
         return viewEmp;
     }
     
