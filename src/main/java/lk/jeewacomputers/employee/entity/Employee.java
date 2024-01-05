@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -82,9 +84,17 @@ public class Employee {
     @NotNull
     private LocalDate addeddatetime;
 
-    @Column(name = "lastmodifydatetime")
+    @Column(name = "lastmodifydate")
     private LocalDate lastmodifydatetime;
 
-    @Column(name = "deletedatetime")
+    @Column(name = "deleteddatetime")
     private LocalDate deletedatetime;
+
+        @ManyToOne // relationship format
+    @JoinColumn(name = "employeestatus_id", referencedColumnName = "id") //join column condition
+    private EmployeeStatus employeestatus_id ;
+
+    @ManyToOne
+    @JoinColumn(name = "designation_id", referencedColumnName = "id")
+    private Designation designation_id ;
 }
