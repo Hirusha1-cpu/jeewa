@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // generate default constructor
 @AllArgsConstructor // all arguments constructor
 public class Employee {
-        @Id // for pk
+    @Id // for pk
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto increment
     @Column(name = "id ", unique = true) // for map with column name
     // @NotNull 

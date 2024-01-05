@@ -8,9 +8,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
      @RequestMapping(value = "/user")
-    public ModelAndView userUI() {
+     public ModelAndView userUI() {
         ModelAndView viewEmp = new ModelAndView();
         viewEmp.setViewName("admin/user.html");
+        viewEmp.addObject("title","User Management : BIT Project 2024");
         return viewEmp;
     }
     

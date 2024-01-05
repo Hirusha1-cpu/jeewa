@@ -52,8 +52,5 @@ public class UserEntity {
     @Column(name = "note")
     @NotNull
     private String note;
-
-    
-
-    
+   
 }
