@@ -3,7 +3,7 @@ window.addEventListener('load', () => {
     //call table refresh function
     refreshEmployeeTable();
     //call form refreash function
-    // refreshEmployeeForm()
+    refreshEmployeeForm()
 })
 
 //create function for refreash table record
@@ -23,6 +23,7 @@ const refreshEmployeeTable = () => {
         { property: getEmployeeStatus, dataType: 'function' },
         { property: getEmpDesign, dataType: 'function' },
         { property: getHasUserAccount, dataType: 'function' },
+        { property: getEmpDeleteStatus, dataType: 'function' },
         // { property: "hasUserAccount", dataType: 'boolean' },
 
     ]
@@ -31,21 +32,81 @@ const refreshEmployeeTable = () => {
     // fillDataIntoTable(tableId,dataList, display property List, refillFunctionName, deleteFunctionName, printFunctionName,buttonVisibility)
     fillDataIntoTable(tableEmployee, employees, displayProperty, refillEmployeeForm, deleteButtonFunction, printEmployee, true)
     // Initialize DataTables on the tableEmployee
-    $(document).ready(function () {
-        $('#tableEmployee').DataTable({
-            paging: true, // Enable pagination
-            searching: true, // Enable search
-        });
-    });
+    // $(document).ready(function () {
+    //     $('#tableEmployee').DataTable({
+    //         paging: true, // Enable pagination
+    //         searching: true, // Enable search
+    //     });
+    // });
 
 
 }
 const refillEmployeeForm =()=>{
-    console.log("Re Fill");
+    $('#empForm').modal('show');
+
+    // employee = employees[rowindex]; // No 'let' declaration, directly update the outer 'employee'
+    employee = JSON.parse(JSON.stringify(item));
+    oldemployee = JSON.parse(JSON.stringify(item));
+
+    console.log(employee);
+
+
+    inputFullName1.value = employee.fullname
+    inputCallingName.value = employee.callingname
+    inputNIC.value = employee.nic
+    inputDob.value = employee.dateofbirth
+    inputMobNo.value = employee.mobile
+    inputEmail.value = employee.email
+    inputAddress.value = employee.address
+    selectStatus.value = employee.civilstatus
+
+    if (employee.landno != null) {
+        inputLand.value = employee.landno
+    } else {
+        inputLand.value = ""
+    }
+
+    if(employee.gender == "Male"){
+        flexRadioMale.checked = true;
+    }else{
+        flexRadioFemale.checked = true;
+
+    }
+    //select designation
+    fillDataIntoSelect(selectDesignation, "Select Designation", designations, 'name',employee.designation_id.name)
+
+    //select emp status
+    fillDataIntoSelect(selectEStatus, "Select Status", Empstatuses, 'name',employee.employeestatus_id.name)
+
+
+    //set valid color for element
 }
-const deleteButtonFunction = ()=>{
-    console.log("Delete ");
+const deleteButtonFunction = (rowOb, rowindex) => {
+    setTimeout(function(){
+
+        const userConfirm = confirm('Are you sure you want to delete' + rowOb.fullname);
+        if (userConfirm) {
+            // employees[rowindex].employeeStatus_id = {id:3, name:'Delete'};
+    
+            let serverResponse = ajaxRequestBodyMethod("/employee", "DELETE", rowOb)
+            if (serverResponse == "OK") {
+                alert("Delete successfully...!")
+                refreshEmployeeTable();
+                formEmployee.reset();
+                refreshEmployeeForm();
+    
+    
+            } else {
+                alert("Delete not succefully  .." + serverResponse)
+            }
+    
+            // alert('Employee delete succefully');
+            // refreshEmployeeTable()
+    
+        }
+    },500)
 }
+
 const printEmployee = ()=>{
     console.log("Print");
 }
@@ -92,4 +153,241 @@ const getHasUserAccount = (rowOb) => {
      
     // }
 
+}
+
+const getEmpDeleteStatus = (rowOb) => {
+    if(rowOb.deletestatus){
+        return '<p class="deleted-status">' + "Deleted" + '</p>';
+    }else{
+        return '<p class="working-status">' + "NotDeleted" + '</p>';
+    }
+}
+
+//create function for refreashForm area
+const refreshEmployeeForm = () => {
+    //create empty object
+    employee = {};
+    // get data list for select element
+    // designations = [
+    //     { id: 1, name: "Manager" },
+    //     { id: 2, name: "Cashier" },
+    //     { id: 3, name: "Store-Manager" },
+    // ]
+    designations = ajaxGetRequest('/designation/findall')
+    fillDataIntoSelect(selectDesignation, 'Select Designation', designations, 'name')
+
+    // Empstatuses = [{ id: 1, name: 'Working ' }, { id: 2, name: 'Resign' }, { id: 3, name: 'Deleted' }]
+    Empstatuses = ajaxGetRequest('/empstatus/findall')
+    fillDataIntoSelect(selectEStatus, "Select Emp Status", Empstatuses, 'name')
+
+    selCivil = [{ id: 1, name: 'Married' }, { id: 2, name: 'Single' }]
+    fillDataIntoSelect(selectStatus, "Select Status", selCivil, 'name')
+
+
+    //need to empty all element
+    // inputNIC.value = '';
+    // inputDob.value = '';
+    // selectStatus.value = ''
+
+
+    //set min value
+    //min = current date newDate()
+    //max = current date + 14 days
+    inputDob.min = '2023-09-01';
+    inputDob.max = '2023-09-30';
+
+    //need to set default color
+    inputNIC.classList.remove("is-valid");
+    inputNIC.style.border = '1px solid #ced4da'
+    inputDob.classList.remove("is-valid");
+    inputDob.style.border = '1px solid #ced4da'
+}
+//function of generate calling name values
+const generateCallingNameValues = () => {
+    const callingnames = document.querySelector('#dtaList');
+    callingnames.innerHTML = '';
+
+    callingNamePartList = inputFullName1.value.split(' ');
+    console.log(callingNamePartList);
+    callingNamePartList.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+
+        callingnames.appendChild(option);
+    })
+}
+//create function for validate calling name
+const txtCallingNameValidator = (feild) => {
+    const callingNameValue = feild.value;
+    console.log(callingNamePartList);
+    let cnameExt = false;
+    for (let element of callingNamePartList) {
+        if (element == callingNameValue) {
+            cnameExt = true;
+            break;
+        }
+    };
+    // let exInddex = callingNamePartList.map(cname => cname).indexOf(callingNameValue);
+
+
+    if (cnameExt) {
+        //valid
+        feild.style.border = '2px solid green'
+        employee.callingname = "callingNameValue"
+    } else {
+        //invalid
+        feild.style.border = '2px solid red'
+        employee.callingname = "null"
+    }
+}
+//create function for check form error
+//need to check all required property values
+const checkError = () => {
+    let errors = '';
+    console.log(employee);
+    // if (inputFullName1.value == "") 
+    if (employee.fullname == null) {
+        errors = errors + "Please enter a valid fullname";
+        // inputFullName1.style.border = '2px solid red';
+        inputFullName1.classList.add("is-invalid");
+    } else {
+        inputFullName1.classList.remove("is-invalid");
+        inputFullName1.classList.add("is-valid");
+    }
+    if (employee.callingname == null) {
+        errors = errors + "Please enter a valid callingnames";
+        // inputFullName1.style.border = '2px solid red';
+        inputEmail.classList.add("is-invalid");
+    }
+    if (employee.nic == null) {
+        errors = errors + "Please enter a valid nic";
+        // inputFullName1.style.border = '2px solid red';
+        inputNIC.classList.add("is-invalid");
+    }
+    if (employee.mobile == null) {
+        errors = errors + "Please enter a valid mobile";
+        // inputFullName1.style.border = '2px solid red';
+        inputMobNo.classList.add("is-invalid");
+    }
+    if (employee.landno == null) {
+        errors = errors + "Please enter a valid land";
+        // inputFullName1.style.border = '2px solid red';
+        inputLandNo.classList.add("is-invalid");
+    }
+    if (employee.email == null) {
+        errors = errors + "Please enter a valid email";
+        // inputFullName1.style.border = '2px solid red';
+        inputEmail.classList.add("is-invalid");
+    }
+
+    return errors;
+}
+//create function for add button
+const buttonEmpAdd = () => {
+    // console.log("hi");
+    //1.need to check form error ---> checkError()
+    let formErrors = checkError()
+    if (formErrors == "") {
+        // alert("no errors")
+        //2.need to check user confirmation
+        let userConfirm = window.confirm("Are you sure?" +
+            employee.fullname +
+            employee.nic +
+            employee.email +
+            employee.mobile +
+            employee.landno +
+            employee.designation_id +
+            employee.civilstatus +
+            employee.employeestatus_id
+        )
+        if (userConfirm) {
+            //3.pass data into backend
+            //call ajaxRequestBodyMethod function
+            let serverResponse = ajaxRequestBodyMethod("/employee", "POST", employee);
+            // $.ajax('/employee',{
+            //     async: false,
+            //     type: "POST",
+            //     data:JSON.stringify(employee),
+            //     contentType:'application/json',
+            //     success:function(data, status, ahr){
+            //         console.log("success"+status + " " + ahr);
+            //         serverResponse =data;
+            //     },
+            //     error:function(ahr, status, errormsg){
+            //         console.log("Fail"+ errormsg+" "+ status);
+            //         serverResponse = errormsg;
+            //     }
+            // })
+            //4.check backend response
+            if (new RegExp('^[0-9]{8}$').test(serverResponse)) {
+                alert("Save successfully...!" + serverResponse)
+                refreshEmployeeTable();
+                formEmployee.reset();
+                refreshEmployeeForm();
+                //need hide modal
+                $('#empForm').modal('hide');
+
+            } else {
+                alert("Save not succefully  .." + serverResponse)
+            }
+
+        }
+    } else {
+        alert("formErrors: " + formErrors)
+    }
+}
+
+//define method for check updates
+const checkUpdate =()=>{
+    let updates = "";
+    if (employee.nic != oldemployee.nic) {
+        updates = updates + "NIC is changed"
+    }
+    if (employee.mobile != oldemployee.mobile) {
+        updates = updates + "mobile is changed into"+ employee.mobile
+    }
+    if (employee.designation_id.name != oldemployee.designation_id.name) {
+        updates = updates + "designation is changed"
+
+    }
+    if (employee.employeestatus_id.name != oldemployee.employeestatus_id.name) {
+        updates = updates + "Emp status is changed"
+
+    }
+    return updates;
+}
+
+//define function for employee update
+const buttonEmpUpdate =()=>{
+    //check error
+    let error = checkError();
+    if(error == ""){
+        //check form update
+        let updates = checkUpdate();
+        if(updates != ""){
+            //call put service
+            let userConfirmation = confirm("are u sure to update following changes...?"+updates)
+            if (userConfirmation) {
+                let updateServiceResponse = ajaxRequestBodyMethod("/employee", "PUT", employee)
+                //check backend response
+            if (updateServiceResponse =="OK") {
+                alert("Update successfully...!" )
+                refreshEmployeeTable();
+                formEmployee.reset();
+                refreshEmployeeForm();
+                //need hide modal
+                $('#empForm').modal('hide');
+
+            } else {
+                alert("Update not succefully  .." + updateServiceResponse)
+            }
+
+            }
+        }else{
+            alert("Form has no any changes");
+        }
+
+    }else{
+        alert("Form has following errors \n"+ error)
+    }
 }

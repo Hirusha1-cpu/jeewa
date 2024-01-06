@@ -10,7 +10,7 @@ public class UserController {
      @RequestMapping(value = "/user")
      public ModelAndView userUI() {
         ModelAndView viewEmp = new ModelAndView();
-        viewEmp.setViewName("admin/user.html");
+        viewEmp.setViewName("system_User_Components/user.html");
         viewEmp.addObject("title","User Management : BIT Project 2024");
         viewEmp.addObject("classUser", "active");
         return viewEmp;

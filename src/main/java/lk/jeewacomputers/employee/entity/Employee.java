@@ -90,7 +90,11 @@ public class Employee {
     @Column(name = "deleteddatetime")
     private LocalDate deletedatetime;
 
-        @ManyToOne // relationship format
+    @Column(name = "deletestatus")
+    @NotNull
+    private Boolean deletestatus;
+
+    @ManyToOne // relationship format
     @JoinColumn(name = "employeestatus_id", referencedColumnName = "id") //join column condition
     private EmployeeStatus employeestatus_id ;
 

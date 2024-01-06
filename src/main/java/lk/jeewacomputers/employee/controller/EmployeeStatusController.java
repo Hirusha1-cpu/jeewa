@@ -12,7 +12,7 @@ public class EmployeeStatusController {
       @Autowired
     private EmployeeStatusDao dao;
 
-     // create get mapping for get empllyee all data --- [/employee/findall]
+    // create get mapping for get empllyee all data --- [/employee/findall]
     @GetMapping(value = "/empstatus/findall", produces = "application/json")
     public List<EmployeeStatus> findAll() {
         // login user authentication and authorization

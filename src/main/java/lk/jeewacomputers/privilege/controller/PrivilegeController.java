@@ -10,7 +10,7 @@ public class PrivilegeController {
     @RequestMapping(value = "/privilege")
     public ModelAndView privilegeUI() {
         ModelAndView viewEmp = new ModelAndView();
-        viewEmp.setViewName("admin/privilege.html");
+        viewEmp.setViewName("system_User_Components/privilege.html");
         viewEmp.addObject("title","Privilege Management : BIT Project 2024");
         viewEmp.addObject("classPrivi", "active");
         return viewEmp;

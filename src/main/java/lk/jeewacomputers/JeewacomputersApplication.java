@@ -25,7 +25,7 @@ public class JeewacomputersApplication {
 	@RequestMapping(value = "/jeewacomputers",method = RequestMethod.GET)
 	public ModelAndView testJeewaUi(){
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin/index.html");
+		modelAndView.setViewName("dashboard/index.html");
 		return modelAndView;
 	}
 
