@@ -7,8 +7,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+// import lk.jeewacomputers.employee.entity.Designation;
+import lk.jeewacomputers.employee.entity.Employee;
+// import lk.jeewacomputers.employee.entity.EmployeeStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,7 +55,11 @@ public class UserEntity {
     private LocalDate addeddatetime;
 
     @Column(name = "note")
-    @NotNull
+    // @NotNull
     private String note;
-   
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    private Employee employee_id;
+
 }

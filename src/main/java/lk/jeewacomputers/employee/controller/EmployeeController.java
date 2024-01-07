@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.transaction.Transactional;
-
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -89,7 +87,7 @@ public class EmployeeController {
         }
 
     }
-    @Transactional
+
     @DeleteMapping(value = "/employee")
     public String delete(@RequestBody Employee employee){
    
@@ -115,7 +113,7 @@ public class EmployeeController {
             return "Delete Not Completed" + e.getMessage();
         }
     }
-    @Transactional
+
     @PutMapping(value = "/employee")
     public String update(@RequestBody Employee employee){
         //need to check duplicate record

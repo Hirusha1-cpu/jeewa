@@ -10,7 +10,7 @@ body{
 }
 
 .main{
-    background-color: rgba(133, 130, 130, 0.39);
+    /* background-color: rgba(133, 130, 130, 0.39); */
     color: black;
     border-radius: 15px;
     /* border: 2px solid black; */
